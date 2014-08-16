@@ -17,7 +17,16 @@ int HalGen::process()
 
 	HalPins * pLED = pPortA->queryPins( "LED" );
 	pLED->setMode( HalPins::PushPull );
-	pLED->setPinStart( 2 );
+	pLED->setPinStart( 1 );
+
+	HalPins * pDHT22 = pPortA->queryPins( "DHT22" );
+	pDHT22->setMode( HalPins::OpenDrain );
+	pDHT22->setPinStart( 2 );
+
+	HalPins * pEncoder = pPortA->queryPins( "Encoder" );
+	pEncoder->setMode( HalPins::PullUp );
+	pEncoder->setPinStart( 4 );
+	pEncoder->setPinCount( 2 );
 
 	for( HalDevice * pDevice : m_Devices )
 		pDevice->makePublic();

@@ -1,7 +1,7 @@
 
 #include "AvrGPIO.h"
 
-#include <QDebug>
+CodeGenerator AvrGPIO::s_codeGen = CodeGenerator(":/_AvrGPIO.h");
 
 AvrGPIO::AvrGPIO( const QString& sPortName, QObject * pParent ) : HalGPIO(pParent)
 {
@@ -12,24 +12,25 @@ void AvrGPIO::generateHeader( QTextStream& s ) const
 {
 	for( HalPins * pPins : pins() )
 	{
+		QVariantHash var;
+		var["NAME"] = pPins->objectName();
+		var["CLEARMASK"] = "0x" + QString::number( ~pPins->mask() & 0xff, 16 );
+
 		if( pPins->mode() < HalPins::HiZ )
 		{
-			QString sReg = pPins->mode() == HalPins::PushPull ? "PORT" : "DDR";
-			sReg += objectName();
-
-			QString sOffset;
-			if( pPins->pinStart() > 0 ) sOffset = " << " + QString::number(pPins->pinStart());
-
-			s << "inline " << pPins->objectName() << "_write( uint8_t value ) { " << sReg << " = (value" << sOffset << "); }\n";
+			var["HAS_OUTPUT"] = true;
+			var["OUTREG"]     = (pPins->mode() == HalPins::PushPull ? "PORT" : "DDR") + objectName();
+			var["OUTPUT"]     = pPins->encode( "v" );
 		}
-		s << "\n";
+
+		if( pPins->mode() > HalPins::PushPull )
+		{
+			var["HAS_INPUT"] = true;
+			var["INPUT"] = pPins->decode( "PIN" + objectName() );
+		}
+
+		s_codeGen.generate( s, var );
 	}
-
-}
-
-void AvrGPIO::generateSource( QTextStream& ) const
-{
-
 }
 
 void AvrGPIO::generateStartup( QTextStream& s ) const

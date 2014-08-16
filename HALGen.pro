@@ -11,11 +11,16 @@ SOURCES += main.cpp \
     FileUtils.cpp \
     HalGen.cpp \
     HalGPIO.cpp \
-    HalDevice.cpp
+    HalDevice.cpp \
+    CodeGenerator.cpp
 
 HEADERS += \
     AvrGPIO.h \
     FileUtils.h \
     HalGen.h \
     HalGPIO.h \
-    HalDevice.h
+    HalDevice.h \
+    CodeGenerator.h
+
+RESOURCES += \
+    HALGen.qrc

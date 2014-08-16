@@ -2,6 +2,7 @@
 #pragma once
 
 #include "HalGPIO.h"
+#include "CodeGenerator.h"
 
 class AvrGPIO : public HalGPIO
 {
@@ -10,8 +11,8 @@ public:
 
 protected:
 	virtual void generateHeader( QTextStream& s ) const;
-	virtual void generateSource( QTextStream& s ) const;
 	virtual void generateStartup( QTextStream& s ) const;
 
-
+private:
+	static CodeGenerator s_codeGen;
 };

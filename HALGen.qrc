@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>_AvrGPIO.h</file>
+    </qresource>
+</RCC>

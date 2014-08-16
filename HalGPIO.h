@@ -46,7 +46,9 @@ public:
 	inline void setDefaultState( unsigned nState ) { m_nDefaultState = nState; }
 
 	// Utility
-	inline unsigned mask() const { return (1 << (m_nPinCount-1)) << m_nPinStart; }
+	inline unsigned mask() const { return ((1 << m_nPinCount)-1) << m_nPinStart; }
+	QString encode( const QString& sVar ) const;
+	QString decode( const QString& sVar ) const;
 
 private:
 	bool     m_bPublic       = false;
